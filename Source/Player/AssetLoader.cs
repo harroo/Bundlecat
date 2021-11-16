@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.IO.Compression;
+using System.Collections.Generic;
 
 namespace BundleCat {
 
@@ -13,23 +14,31 @@ namespace BundleCat {
 
             foreach (string file in Assets.Values) {
 
-                string filePath = file.Split('@')[0];
-                string fileName = filePath.Split('/')[file.Split('/').Length - 1];
-                string rootFolderName = filePath.Split('/')[0];
-                string hash = file.Split('@')[1];
+                // string filePath = file.Split('@')[0];
+                string filePath = SplitString(file, '@')[0];
+
+                // string fileName = filePath.Split('/')[file.Split('/').Length - 1];
+                string fileName = SplitString(filePath, '/')[SplitString(file, '/').Length - 1];
+
+                // string rootFolderName = filePath.Split('/')[0];
+                string rootFolderName = SplitString(filePath, '/')[0];
+
+                // string hash = file.Split('@')[1];
+                string hash = SplitString(file, '@')[1];
 
                 string fullDir = "";
 
-                foreach (string value in filePath.Split('/')) {
+                // foreach (string value in filePath.Split('/')) {
+                foreach (string value in SplitString(filePath, '/')) {
 
                     if (value != fileName && value != rootFolderName)
                         fullDir += fullDir == "" ? value : "/" + value;
                 }
 
-                // string path = "C:/Users/" + Environment.UserName + "/MyGames/"
-                //     + Values.ProjectName + "_" + Values.ProjectVersion + "/" + fullDir;
+                string path = "C:/Users/" + Environment.UserName + "/MyGames/"
+                    + Values.ProjectName + "_" + Values.ProjectVersion + "/" + fullDir;
 
-                string path = Values.ProjectName + "_" + Values.ProjectVersion + "/" + fullDir;
+                // string path = Values.ProjectName + "_" + Values.ProjectVersion + "/" + fullDir;
 
                 EnsureDirectory(path);
 
@@ -90,6 +99,31 @@ namespace BundleCat {
                     return memory.ToArray();
                 }
             }
+        }
+
+        //windows hates string.Split, so i made my own 1
+        //and yea ik its unoptimized, it just need to do tha job
+        private static string[] SplitString (string input, char marker) {
+
+            List<string> strings = new List<string>();
+
+            string temp = "";
+
+            foreach (char c in input) {
+
+                if (c == marker) {
+
+                    strings.Add(temp);
+                    temp = "";
+                    continue;
+                }
+
+                temp += c.ToString();
+            }
+
+            strings.Add(temp);
+
+            return strings.ToArray();
         }
     }
 }

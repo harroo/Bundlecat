@@ -18,7 +18,7 @@ namespace BundleCat {
 
             Console.WriteLine("Reading Arguments...");
 
-            string projectName = "", projectVersion = "", resourceDirectory = "", outputName = "", icon = "";
+            string projectName = "", projectVersion = "", resourceDirectory = "", outputName = "", icon = "", mexe = "";
             foreach (string arg in args) {
 
                 if (!arg.Contains(":")) continue;
@@ -32,11 +32,13 @@ namespace BundleCat {
                     case "-resourceDirectory": case "-res": resourceDirectory = values[1]; break;
                     case "-out": case "-outputName": outputName = values[1]; break;
                     case "-icon": icon = values[1]; break;
+                    case "-mainExecutable": case "-mex": mexe = values[1]; break;
                 }
             }
             if (projectName == "") Fail("Please enter a projectName with -projectName");
             if (projectVersion == "") Fail("Please enter a projectVersion with -projectVersion");
             if (resourceDirectory == "") Fail("Please enter a resourceDirectory with -resourceDirectory");
+            if (mexe == "") Fail("Please enter a mainExecutable with -mainExecutable \n(dont include the path to the resources, \neg: folder is (myresfolder and in it is myexe.exe) -res:myresfolder/ -mex:myexe.exe), \n but then like this: \neg: folder is (myresfolder and in it is bin/myexe.exe, so like myresfolder/bin/myexe.exe) -res:myresfolder/ -mex:bin/myexe.exe),"); //yes ik this is long, i got no excuse
             if (outputName == "") outputName = projectName + "_" + projectVersion + ".exe";
             if (icon != "") File.Copy(icon, "icontemp.ico"); else {
                 LoadResource("defaulticon.ico"); File.Move("defaulticon.ico", "icontemp.ico");
@@ -72,24 +74,12 @@ namespace BundleCat {
             string valueScript = File.ReadAllText("Values.cs");
             valueScript = valueScript.Replace("PROJECT_NAME", projectName);
             valueScript = valueScript.Replace("PROJECT_VERSION", projectVersion);
+            valueScript = valueScript.Replace("MAIN_EXEC_PATH", mexe);
             File.WriteAllText("Values.cs", valueScript);
 
             Console.WriteLine("Compiling...");
 
-            string command = "mcs AssetLoader.cs Display.cs Program.cs Values.cs Assets.cs @ResponseFile";
-            Process bashProcess = new Process();
-            bashProcess.StartInfo.RedirectStandardOutput = true;
-            bashProcess.StartInfo.UseShellExecute = false;
-            bashProcess.StartInfo.CreateNoWindow = true;
-            bashProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            bashProcess.StartInfo.FileName = "/bin/bash";
-            bashProcess.StartInfo.Arguments = "-c \"" + command + "\"";
-            bashProcess.Start();
-			while (!bashProcess.StandardOutput.EndOfStream) {
-
-				Console.WriteLine(bashProcess.StandardOutput.ReadLine());
-			}
-			bashProcess.WaitForExit();
+            ExecuteCommand("mcs AssetLoader.cs Display.cs Program.cs Values.cs Assets.cs @ResponseFile");
 
             Console.WriteLine("Cleaning up...");
 
@@ -130,6 +120,23 @@ namespace BundleCat {
             Console.WriteLine("FATAL: " + message);
 
             Environment.Exit(-1);
+        }
+
+        private static void ExecuteCommand (string command) {
+
+            Process bashProcess = new Process();
+            bashProcess.StartInfo.RedirectStandardOutput = true;
+            bashProcess.StartInfo.UseShellExecute = false;
+            bashProcess.StartInfo.CreateNoWindow = true;
+            bashProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            bashProcess.StartInfo.FileName = "/bin/bash";
+            bashProcess.StartInfo.Arguments = "-c \"" + command + "\"";
+            bashProcess.Start();
+            while (!bashProcess.StandardOutput.EndOfStream) {
+
+                Console.WriteLine(bashProcess.StandardOutput.ReadLine());
+            }
+            bashProcess.WaitForExit();
         }
 
         private static List<string> existingHashes = new List<string>();

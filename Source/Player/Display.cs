@@ -8,7 +8,7 @@ namespace BundleCat {
         public static void Render () {
 
             Console.Clear();
-            Console.WriteLine("Bundlecat " + "indev");
+            Console.WriteLine("Bundlecat");
 
             for (int i = 0; i < Console.WindowHeight / 4; ++i)
                 Console.WriteLine();
