@@ -13,7 +13,7 @@ namespace BundleCat {
             for (int i = 0; i < Console.WindowHeight / 4; ++i)
                 Console.WriteLine();
 
-            string msg = "Installing PROJECT NAME";
+            string msg = "Installing " + Values.ProjectName;
             for (int i = 0; i < Console.WindowWidth / 2 - (msg.Length / 2); ++i)
                 Console.Write(" ");
             Console.WriteLine(msg);
@@ -21,15 +21,14 @@ namespace BundleCat {
             for (int i = 0; i < Console.WindowHeight / 6; ++i)
                 Console.WriteLine();
 
-            float perc = 69f / 100f;
-
-            DrawBar(perc);
-            DrawBar(perc);
-            DrawBar(perc);
+            DrawBar(Values.TotalPercent);
+            DrawBar(Values.TotalPercent);
+            DrawBar(Values.TotalPercent);
 
             Console.WriteLine();
             Console.Write(" ");
-            Console.WriteLine("Loading Message...");
+            Console.WriteLine(Values.LoadingMessage);
+            Console.WriteLine();
         }
 
         private static void DrawBar (float percentage) {

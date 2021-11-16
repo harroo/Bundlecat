@@ -1,0 +1,5 @@
+-res:Source/Player/AssetLoader.cs
+-res:Source/Player/Display.cs
+-res:Source/Player/Program.cs
+-res:Source/Player/Values.cs
+-res:Assets/defaulticon.ico

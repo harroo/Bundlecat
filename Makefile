@@ -1,6 +1,6 @@
 
 output:
-	find Source/ | grep .cs | xargs mcs -out:Output/Bundlecat.cil
+	find Source/Builder/ | grep .cs | xargs mcs -out:Output/Bundlecat.cil @Source/reslist
 
 prep:
 	mkdir Output/

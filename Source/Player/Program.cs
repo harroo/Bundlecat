@@ -9,7 +9,10 @@ namespace BundleCat {
 
             Display.Render();
 
-            Console.ReadKey();
+            AssetLoader.PerformFullUnload();
+
+            Values.LoadingMessage = "Done! installation succesfull";
+            Display.Render();
         }
     }
 }
