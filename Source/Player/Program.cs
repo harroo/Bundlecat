@@ -8,12 +8,12 @@ namespace BundleCat {
 
         public static void Main (string[] args) {
 
-            Display.Render();
+            Display.Render(true);
 
             AssetLoader.PerformFullUnload();
 
             Values.LoadingMessage = "creating shortcut...";
-            Display.Render();
+            Display.Render(true);
 
             appShortcutToDesktop(Values.ProjectName + " " + Values.ProjectVersion,
                 "C:/Users/" + Environment.UserName + "/MyGames/"
@@ -21,7 +21,7 @@ namespace BundleCat {
             );
 
             Values.LoadingMessage = "Done! installation succesfull";
-            Display.Render();
+            Display.Render(true);
 
             Environment.Exit(0);
         }

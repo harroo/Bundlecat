@@ -5,7 +5,12 @@ namespace BundleCat {
 
     public static class Display {
 
-        public static void Render () {
+        private static int tickCount = 0;
+
+        public static void Render (bool important) {
+
+            if (!important) if (tickCount++ < 12) return;
+            tickCount = 0;
 
             Console.Clear();
             Console.WriteLine("Bundlecat");

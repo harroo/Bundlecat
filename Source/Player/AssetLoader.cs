@@ -48,7 +48,7 @@ namespace BundleCat {
 
                 count++;
                 Values.TotalPercent = (float)count / Assets.Values.Length;
-                Display.Render();
+                Display.Render(false);
             }
         }
 
