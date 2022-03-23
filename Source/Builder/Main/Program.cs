@@ -79,7 +79,7 @@ namespace BundleCat {
 
             Console.WriteLine("Compiling...");
 
-            ExecuteCommand("mcs AssetLoader.cs Display.cs Program.cs Values.cs Assets.cs @ResponseFile");
+            ExecuteCommand("mcs -t:winexe -pkg:dotnet AssetLoader.cs Display.cs Program.cs Values.cs Assets.cs @ResponseFile");
 
             Console.WriteLine("Cleaning up...");
 
